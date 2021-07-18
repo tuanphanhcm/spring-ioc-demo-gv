@@ -3,11 +3,14 @@ package cybersoft.java12.springdemo.container;
 import cybersoft.java12.springdemo.dbconnection.DbDataSource;
 import cybersoft.java12.springdemo.dbconnection.MySqlConnection;
 import cybersoft.java12.springdemo.dbconnection.PgConnection;
+import cybersoft.java12.springdemo.repository.AuthorRepository;
+import cybersoft.java12.springdemo.repository.AuthorRepositoryImpl;
 
 public class IoCContainer {
 	private static MySqlConnection mySqlConnection = null;
 	private static PgConnection pgConnection = null;
 	private static DbDataSource dataSource = null;
+	private static AuthorRepository authorRepository = null;
 	
 	static public Object getBean(String beanName) {
 		switch (beanName) {
@@ -17,10 +20,18 @@ public class IoCContainer {
 			return getPgConnection();
 		case "dataSource":
 			return getDataSource();
+		case "authorRepository":
+			return getAuthorRepository();
 		default:
 			break;
 		}
 		return null;
+	}
+
+	private static Object getAuthorRepository() {
+		return authorRepository == null 
+				? new AuthorRepositoryImpl() 
+				: authorRepository;
 	}
 
 	private static Object getDataSource() {
